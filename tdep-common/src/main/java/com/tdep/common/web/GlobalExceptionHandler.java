@@ -1,6 +1,6 @@
 package com.tdep.common.web;
 
-import com.tdep.common.api.ApiResponse;
+import com.tdep.common.api.Result;
 import com.tdep.common.enums.ResultCode;
 import com.tdep.common.exception.BusinessException;
 import jakarta.validation.ConstraintViolationException;
@@ -33,11 +33,11 @@ public class GlobalExceptionHandler {
      * @return 统一错误响应
      */
     @ExceptionHandler(BusinessException.class)
-    public ResponseEntity<ApiResponse<Void>> handleBusinessException(BusinessException exception) {
+    public ResponseEntity<Result<Void>> handleBusinessException(BusinessException exception) {
         log.warn("业务异常：{}", exception.getMessage());
         ResultCode resultCode = exception.getResultCode();
         return ResponseEntity.status(resolveHttpStatus(resultCode))
-                .body(ApiResponse.fail(resultCode, exception.getMessage()));
+                .body(Result.fail(resultCode, exception.getMessage()));
     }
 
     /**
@@ -47,14 +47,14 @@ public class GlobalExceptionHandler {
      * @return 统一错误响应
      */
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ResponseEntity<ApiResponse<Void>> handleMethodArgumentNotValid(MethodArgumentNotValidException exception) {
+    public ResponseEntity<Result<Void>> handleMethodArgumentNotValid(MethodArgumentNotValidException exception) {
         String message = exception.getBindingResult()
                 .getFieldErrors()
                 .stream()
                 .map(this::formatFieldError)
                 .collect(Collectors.joining("; "));
         return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY)
-                .body(ApiResponse.fail(ResultCode.VALIDATION_ERROR, message));
+                .body(Result.fail(ResultCode.VALIDATION_ERROR, message));
     }
 
     /**
@@ -64,9 +64,9 @@ public class GlobalExceptionHandler {
      * @return 统一错误响应
      */
     @ExceptionHandler(ConstraintViolationException.class)
-    public ResponseEntity<ApiResponse<Void>> handleConstraintViolation(ConstraintViolationException exception) {
+    public ResponseEntity<Result<Void>> handleConstraintViolation(ConstraintViolationException exception) {
         return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY)
-                .body(ApiResponse.fail(ResultCode.VALIDATION_ERROR, exception.getMessage()));
+                .body(Result.fail(ResultCode.VALIDATION_ERROR, exception.getMessage()));
     }
 
     /**
@@ -76,10 +76,10 @@ public class GlobalExceptionHandler {
      * @return 统一错误响应
      */
     @ExceptionHandler(MissingServletRequestParameterException.class)
-    public ResponseEntity<ApiResponse<Void>> handleMissingServletRequestParameter(MissingServletRequestParameterException exception) {
+    public ResponseEntity<Result<Void>> handleMissingServletRequestParameter(MissingServletRequestParameterException exception) {
         String message = "缺少必要请求参数：" + exception.getParameterName();
         return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                .body(ApiResponse.fail(ResultCode.BAD_REQUEST, message));
+                .body(Result.fail(ResultCode.BAD_REQUEST, message));
     }
 
     /**
@@ -89,10 +89,10 @@ public class GlobalExceptionHandler {
      * @return 统一错误响应
      */
     @ExceptionHandler(MethodArgumentTypeMismatchException.class)
-    public ResponseEntity<ApiResponse<Void>> handleMethodArgumentTypeMismatch(MethodArgumentTypeMismatchException exception) {
+    public ResponseEntity<Result<Void>> handleMethodArgumentTypeMismatch(MethodArgumentTypeMismatchException exception) {
         String message = "请求参数类型错误：" + exception.getName();
         return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                .body(ApiResponse.fail(ResultCode.BAD_REQUEST, message));
+                .body(Result.fail(ResultCode.BAD_REQUEST, message));
     }
 
     /**
@@ -102,9 +102,9 @@ public class GlobalExceptionHandler {
      * @return 统一错误响应
      */
     @ExceptionHandler(HttpRequestMethodNotSupportedException.class)
-    public ResponseEntity<ApiResponse<Void>> handleMethodNotSupported(HttpRequestMethodNotSupportedException exception) {
+    public ResponseEntity<Result<Void>> handleMethodNotSupported(HttpRequestMethodNotSupportedException exception) {
         return ResponseEntity.status(HttpStatus.METHOD_NOT_ALLOWED)
-                .body(ApiResponse.fail(ResultCode.METHOD_NOT_ALLOWED, exception.getMessage()));
+                .body(Result.fail(ResultCode.METHOD_NOT_ALLOWED, exception.getMessage()));
     }
 
     /**
@@ -114,9 +114,9 @@ public class GlobalExceptionHandler {
      * @return 统一错误响应
      */
     @ExceptionHandler(AuthenticationException.class)
-    public ResponseEntity<ApiResponse<Void>> handleAuthentication(AuthenticationException exception) {
+    public ResponseEntity<Result<Void>> handleAuthentication(AuthenticationException exception) {
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
-                .body(ApiResponse.fail(ResultCode.UNAUTHORIZED, exception.getMessage()));
+                .body(Result.fail(ResultCode.UNAUTHORIZED, exception.getMessage()));
     }
 
     /**
@@ -126,9 +126,9 @@ public class GlobalExceptionHandler {
      * @return 统一错误响应
      */
     @ExceptionHandler(AccessDeniedException.class)
-    public ResponseEntity<ApiResponse<Void>> handleAccessDenied(AccessDeniedException exception) {
+    public ResponseEntity<Result<Void>> handleAccessDenied(AccessDeniedException exception) {
         return ResponseEntity.status(HttpStatus.FORBIDDEN)
-                .body(ApiResponse.fail(ResultCode.FORBIDDEN, exception.getMessage()));
+                .body(Result.fail(ResultCode.FORBIDDEN, exception.getMessage()));
     }
 
     /**
@@ -138,10 +138,10 @@ public class GlobalExceptionHandler {
      * @return 统一错误响应
      */
     @ExceptionHandler(Exception.class)
-    public ResponseEntity<ApiResponse<Void>> handleException(Exception exception) {
+    public ResponseEntity<Result<Void>> handleException(Exception exception) {
         log.error("系统内部异常", exception);
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                .body(ApiResponse.fail(ResultCode.INTERNAL_ERROR));
+                .body(Result.fail(ResultCode.INTERNAL_ERROR));
     }
 
     /**

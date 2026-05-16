@@ -1,7 +1,7 @@
 package com.tdep.common.security;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.tdep.common.api.ApiResponse;
+import com.tdep.common.api.Result;
 import com.tdep.common.enums.ResultCode;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -30,6 +30,6 @@ public class RestAuthenticationEntryPoint implements AuthenticationEntryPoint {
         response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
         response.setCharacterEncoding(StandardCharsets.UTF_8.name());
         response.setContentType(MediaType.APPLICATION_JSON_VALUE);
-        objectMapper.writeValue(response.getWriter(), ApiResponse.fail(ResultCode.UNAUTHORIZED));
+        objectMapper.writeValue(response.getWriter(), Result.fail(ResultCode.UNAUTHORIZED));
     }
 }

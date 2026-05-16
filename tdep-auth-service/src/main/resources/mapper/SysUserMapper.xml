@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.tdep.auth.mapper.SysUserMapper">
+
+    <!-- 查询用户有效角色，过滤逻辑删除和禁用数据。 -->
+    <select id="selectRolesByUserId" resultType="com.tdep.auth.entity.SysRole">
+        SELECT DISTINCT r.id,
+                        r.role_code,
+                        r.role_name,
+                        r.description,
+                        r.status,
+                        r.created_at,
+                        r.updated_at,
+                        r.deleted
+        FROM sys_role r
+                 INNER JOIN sys_user_role ur ON ur.role_id = r.id
+        WHERE ur.user_id = #{userId}
+          AND ur.deleted = 0
+          AND r.deleted = 0
+          AND r.status = 1
+    </select>
+
+    <!-- 查询用户有效权限，过滤逻辑删除和禁用数据。 -->
+    <select id="selectPermissionsByUserId" resultType="com.tdep.auth.entity.SysPermission">
+        SELECT DISTINCT p.id,
+                        p.permission_code,
+                        p.permission_name,
+                        p.permission_type,
+                        p.resource_path,
+                        p.http_method,
+                        p.description,
+                        p.status,
+                        p.created_at,
+                        p.updated_at,
+                        p.deleted
+        FROM sys_permission p
+                 INNER JOIN sys_role_permission rp ON rp.permission_id = p.id
+                 INNER JOIN sys_user_role ur ON ur.role_id = rp.role_id
+                 INNER JOIN sys_role r ON r.id = rp.role_id
+        WHERE ur.user_id = #{userId}
+          AND ur.deleted = 0
+          AND rp.deleted = 0
+          AND r.deleted = 0
+          AND r.status = 1
+          AND p.deleted = 0
+          AND p.status = 1
+    </select>
+</mapper>

@@ -8,7 +8,7 @@ spring:
     name: tdep-auth-service
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: ${TDEP_AUTH_DB_URL:jdbc:mysql://localhost:3306/tdep_auth?useUnicode=true&characterEncoding=utf8&serverTimezone=Asia/Shanghai&useSSL=false&allowPublicKeyRetrieval=true}
+    url: ${TDEP_AUTH_DB_URL:jdbc:mysql://localhost:3306/tdep_auth?useUnicode=true&characterEncoding=utf8&serverTimezone=Asia/Shanghai&useSSL=false&allowPublicKeyRetrieval=true&createDatabaseIfNotExist=true}
     username: ${TDEP_AUTH_DB_USERNAME:root}
     password: ${TDEP_AUTH_DB_PASSWORD:root}
     hikari:
@@ -16,6 +16,12 @@ spring:
       maximum-pool-size: 10
       minimum-idle: 2
       connection-timeout: 30000
+  sql:
+    init:
+      mode: ${TDEP_AUTH_SQL_INIT_MODE:always}
+      encoding: UTF-8
+      schema-locations: classpath:schema.sql
+      data-locations: classpath:data.sql
   data:
     redis:
       host: ${TDEP_REDIS_HOST:localhost}
@@ -51,6 +57,8 @@ tdep:
       token-prefix: "Bearer "
     permit-all-urls:
       - /actuator/health
+      - /api/auth/login
+      - /api/auth/register
       - /auth/login
       - /auth/register
 

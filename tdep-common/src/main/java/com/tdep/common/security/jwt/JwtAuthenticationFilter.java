@@ -9,6 +9,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -33,6 +34,8 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     private final SecurityProperties securityProperties;
 
+    private final ObjectProvider<JwtTokenValidator> tokenValidators;
+
     @Override
     protected void doFilterInternal(HttpServletRequest request,
                                     HttpServletResponse response,
@@ -46,6 +49,12 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
         try {
             JwtClaims claims = jwtTokenService.parseAccessToken(token);
+            if (!isTokenActive(token, claims)) {
+                log.warn("JWT 令牌未登记或已退出登录");
+                SecurityContextHolder.clearContext();
+                filterChain.doFilter(request, response);
+                return;
+            }
             TdepUserPrincipal principal = buildPrincipal(claims);
             UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(
                     principal,
@@ -56,6 +65,9 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             SecurityContextHolder.getContext().setAuthentication(authentication);
         } catch (JwtException | IllegalArgumentException exception) {
             log.warn("JWT 令牌解析失败：{}", exception.getMessage());
+            SecurityContextHolder.clearContext();
+        } catch (RuntimeException exception) {
+            log.warn("JWT 令牌状态校验失败：{}", exception.getMessage());
             SecurityContextHolder.clearContext();
         }
 
@@ -87,5 +99,17 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                 .permissions(permissions)
                 .authorities(authorities)
                 .build();
+    }
+
+    /**
+     * 执行服务侧令牌状态校验；没有注册扩展校验器时仅依赖 JWT 自身签名和过期时间。
+     *
+     * @param token  JWT 字符串
+     * @param claims JWT 载荷
+     * @return true 表示令牌有效
+     */
+    private boolean isTokenActive(String token, JwtClaims claims) {
+        return tokenValidators.orderedStream()
+                .allMatch(validator -> validator.isTokenActive(token, claims));
     }
 }
