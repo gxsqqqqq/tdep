@@ -31,7 +31,13 @@ spring:
         - id: tdep-case-service
           uri: ${TDEP_CASE_SERVICE_URI:http://localhost:9004}
           predicates:
-            - Path=/api/cases/**,/api/documents/**
+            - Path=/api/cases/**
+          filters:
+            - StripPrefix=1
+        - id: tdep-document-service
+          uri: ${TDEP_DOCUMENT_SERVICE_URI:http://localhost:9006}
+          predicates:
+            - Path=/api/document/**,/api/documents/**,/api/template/**
           filters:
             - StripPrefix=1
         - id: tdep-ai-service

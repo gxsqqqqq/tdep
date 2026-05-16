@@ -1,0 +1,82 @@
+### 上传证据文件
+POST http://localhost:9003/api/evidences/upload
+Authorization: Bearer {{accessToken}}
+Content-Type: multipart/form-data; boundary=WebAppBoundary
+
+--WebAppBoundary
+Content-Disposition: form-data; name="caseId"
+
+1000001
+--WebAppBoundary
+Content-Disposition: form-data; name="description"
+
+电子合同原件
+--WebAppBoundary
+Content-Disposition: form-data; name="file"; filename="contract.txt"
+Content-Type: text/plain
+
+This is a trusted digital evidence demo file.
+--WebAppBoundary--
+
+### 分页查询证据
+GET http://localhost:9003/api/evidences?pageNo=1&pageSize=10&caseId=1000001
+Authorization: Bearer {{accessToken}}
+
+### 查询证据详情
+GET http://localhost:9003/api/evidences/{{evidenceId}}
+Authorization: Bearer {{accessToken}}
+
+### 查询证据 Hash
+GET http://localhost:9003/api/evidences/hash/{{evidenceId}}
+Authorization: Bearer {{accessToken}}
+
+### 校验证据完整性
+POST http://localhost:9003/api/evidences/{{evidenceId}}/verify
+Authorization: Bearer {{accessToken}}
+Content-Type: application/json
+
+{
+  "remark": "重新计算MinIO对象SHA-256并比对原始Hash"
+}
+
+### 获取原始文件预签名下载地址
+GET http://localhost:9003/api/evidences/{{evidenceId}}/download-url
+Authorization: Bearer {{accessToken}}
+
+### 生成PDF固化凭证
+POST http://localhost:9003/api/evidences/{{evidenceId}}/seal
+Authorization: Bearer {{accessToken}}
+Content-Type: application/json
+
+{
+  "remark": "生成电子证据固化凭证"
+}
+
+### 获取PDF固化凭证下载地址
+GET http://localhost:9003/api/evidences/{{evidenceId}}/seal/download-url
+Authorization: Bearer {{accessToken}}
+
+### 查询证据链
+GET http://localhost:9003/api/evidences/{{evidenceId}}/chains
+Authorization: Bearer {{accessToken}}
+
+### 校验证据链完整性
+POST http://localhost:9003/api/evidences/{{evidenceId}}/chains/verify
+Authorization: Bearer {{accessToken}}
+
+### 查询操作日志
+GET http://localhost:9003/api/evidences/{{evidenceId}}/logs
+Authorization: Bearer {{accessToken}}
+
+### 冻结证据
+POST http://localhost:9003/api/evidences/{{evidenceId}}/freeze
+Authorization: Bearer {{accessToken}}
+Content-Type: application/json
+
+{
+  "reason": "司法审查期间冻结证据"
+}
+
+### 逻辑删除证据
+DELETE http://localhost:9003/api/evidences/{{evidenceId}}
+Authorization: Bearer {{accessToken}}

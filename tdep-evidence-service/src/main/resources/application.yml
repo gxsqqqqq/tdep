@@ -8,7 +8,7 @@ spring:
     name: tdep-evidence-service
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: ${TDEP_EVIDENCE_DB_URL:jdbc:mysql://localhost:3306/tdep_evidence?useUnicode=true&characterEncoding=utf8&serverTimezone=Asia/Shanghai&useSSL=false&allowPublicKeyRetrieval=true}
+    url: ${TDEP_EVIDENCE_DB_URL:jdbc:mysql://localhost:3306/tdep_evidence?useUnicode=true&characterEncoding=utf8&serverTimezone=Asia/Shanghai&useSSL=false&allowPublicKeyRetrieval=true&createDatabaseIfNotExist=true}
     username: ${TDEP_EVIDENCE_DB_USERNAME:root}
     password: ${TDEP_EVIDENCE_DB_PASSWORD:root}
     hikari:
@@ -16,6 +16,15 @@ spring:
       maximum-pool-size: 10
       minimum-idle: 2
       connection-timeout: 30000
+  sql:
+    init:
+      mode: ${TDEP_EVIDENCE_SQL_INIT_MODE:always}
+      encoding: UTF-8
+      schema-locations: classpath:schema.sql
+  servlet:
+    multipart:
+      max-file-size: ${TDEP_EVIDENCE_MAX_FILE_SIZE:200MB}
+      max-request-size: ${TDEP_EVIDENCE_MAX_REQUEST_SIZE:220MB}
   data:
     redis:
       host: ${TDEP_REDIS_HOST:localhost}
@@ -42,6 +51,16 @@ mybatis-plus:
       logic-not-delete-value: 0
 
 tdep:
+  evidence:
+    storage:
+      endpoint: ${TDEP_MINIO_ENDPOINT:http://localhost:9000}
+      access-key: ${TDEP_MINIO_ACCESS_KEY:minioadmin}
+      secret-key: ${TDEP_MINIO_SECRET_KEY:minioadmin}
+      original-bucket: ${TDEP_MINIO_EVIDENCE_ORIGINAL_BUCKET:tdep-evidence-original}
+      sealed-bucket: ${TDEP_MINIO_EVIDENCE_SEALED_BUCKET:tdep-evidence-sealed}
+      temp-bucket: ${TDEP_MINIO_EVIDENCE_TEMP_BUCKET:tdep-evidence-temp}
+      preview-bucket: ${TDEP_MINIO_EVIDENCE_PREVIEW_BUCKET:tdep-evidence-preview}
+      presigned-url-seconds: ${TDEP_MINIO_PRESIGNED_URL_SECONDS:900}
   security:
     jwt:
       issuer: ${TDEP_JWT_ISSUER:tdep}

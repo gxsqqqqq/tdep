@@ -19,6 +19,7 @@
         <module>tdep-user-service</module>
         <module>tdep-evidence-service</module>
         <module>tdep-case-service</module>
+        <module>tdep-document-service</module>
         <module>tdep-ai-service</module>
     </modules>
 

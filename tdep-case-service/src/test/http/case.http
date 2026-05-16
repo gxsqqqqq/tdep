@@ -1,0 +1,115 @@
+### 创建案件草稿
+POST http://localhost:9004/api/cases
+Content-Type: application/json
+Authorization: Bearer {{accessToken}}
+
+{
+  "caseTitle": "买卖合同纠纷",
+  "caseType": "CIVIL",
+  "causeAction": "买卖合同纠纷",
+  "procedureType": "FIRST_INSTANCE",
+  "claimRequest": "请求判令被告支付货款及违约金。",
+  "claimAmount": 120000.00,
+  "courtName": "TDEP互联网法院",
+  "parties": [
+    {
+      "partyType": "PLAINTIFF",
+      "partyName": "张三",
+      "identityType": "ID_CARD",
+      "identityNo": "110101199001010011",
+      "contactPhone": "13800000000",
+      "contactAddress": "北京市朝阳区",
+      "userId": 10001
+    },
+    {
+      "partyType": "DEFENDANT",
+      "partyName": "某某贸易有限公司",
+      "identityType": "UNIFIED_SOCIAL_CREDIT_CODE",
+      "identityNo": "91110000123456789X",
+      "contactPhone": "13900000000",
+      "contactAddress": "北京市海淀区",
+      "userId": 10002
+    }
+  ]
+}
+
+### 案件分页
+GET http://localhost:9004/api/cases?pageNo=1&pageSize=10&status=DRAFT
+Authorization: Bearer {{accessToken}}
+
+### 案件详情
+GET http://localhost:9004/api/cases/{{caseId}}
+Authorization: Bearer {{accessToken}}
+
+### 状态流转：提交立案 DRAFT -> SUBMITTED
+POST http://localhost:9004/api/cases/{{caseId}}/transitions
+Content-Type: application/json
+Authorization: Bearer {{accessToken}}
+
+{
+  "action": "SUBMIT",
+  "comment": "当事人提交在线立案申请"
+}
+
+### 指派法官
+PUT http://localhost:9004/api/cases/{{caseId}}/judge
+Content-Type: application/json
+Authorization: Bearer {{accessToken}}
+
+{
+  "judgeId": 20001,
+  "clerkId": 20002,
+  "comment": "指派承办法官和书记员"
+}
+
+### 上传证据
+POST http://localhost:9004/api/cases/{{caseId}}/evidences
+Content-Type: application/json
+Authorization: Bearer {{accessToken}}
+
+{
+  "evidenceName": "电子合同",
+  "evidenceType": "DOCUMENT",
+  "fileUrl": "https://example.com/evidence/contract.pdf",
+  "fileHash": "sha256-demo",
+  "description": "双方签署的电子合同"
+}
+
+### 创建庭审记录
+POST http://localhost:9004/api/cases/{{caseId}}/trials
+Content-Type: application/json
+Authorization: Bearer {{accessToken}}
+
+{
+  "trialType": "ONLINE",
+  "trialTime": "2026-06-01 09:30:00",
+  "trialLocation": "https://trial.tdep.local/room/1001",
+  "judgeId": 20001,
+  "clerkId": 20002,
+  "trialRecord": "庭审排期记录",
+  "recordUrl": "https://example.com/trial/record.docx"
+}
+
+### 更新庭审记录
+PUT http://localhost:9004/api/cases/{{caseId}}/trials/{{trialId}}/record
+Content-Type: application/json
+Authorization: Bearer {{accessToken}}
+
+{
+  "trialRecord": "庭审已完成，双方完成举证质证。",
+  "recordUrl": "https://example.com/trial/record-final.docx"
+}
+
+### 创建判决记录
+POST http://localhost:9004/api/cases/{{caseId}}/judgements
+Content-Type: application/json
+Authorization: Bearer {{accessToken}}
+
+{
+  "judgementType": "JUDGEMENT",
+  "title": "民事判决书",
+  "contentSummary": "判令被告支付货款及违约金。",
+  "documentUrl": "https://example.com/judgement/jdg.pdf",
+  "judgeId": 20001,
+  "appealDeadline": "2026-06-16 23:59:59"
+}

@@ -1,0 +1,152 @@
+### 状态流转测试案例
+### 说明：以下请求按顺序执行，{{caseId}} 使用创建案件返回的 id。
+
+### 1. DRAFT -> SUBMITTED：当事人提交立案
+POST http://localhost:9004/api/cases/{{caseId}}/transitions
+Content-Type: application/json
+Authorization: Bearer {{partyToken}}
+
+{
+  "action": "SUBMIT",
+  "comment": "提交立案"
+}
+
+### 2. SUBMITTED -> FILING_REVIEW：书记员进入审核
+POST http://localhost:9004/api/cases/{{caseId}}/transitions
+Content-Type: application/json
+Authorization: Bearer {{clerkToken}}
+
+{
+  "action": "START_REVIEW",
+  "comment": "材料进入审核"
+}
+
+### 3. FILING_REVIEW -> ACCEPTED：法官审核受理
+POST http://localhost:9004/api/cases/{{caseId}}/transitions
+Content-Type: application/json
+Authorization: Bearer {{judgeToken}}
+
+{
+  "action": "ACCEPT",
+  "comment": "符合立案条件"
+}
+
+### 4. ACCEPTED -> PAYMENT_PENDING：书记员生成缴费通知
+POST http://localhost:9004/api/cases/{{caseId}}/transitions
+Content-Type: application/json
+Authorization: Bearer {{clerkToken}}
+
+{
+  "action": "PAYMENT_NOTICE",
+  "comment": "生成诉讼费缴费通知"
+}
+
+### 5. PAYMENT_PENDING -> PAID：当事人确认缴费
+POST http://localhost:9004/api/cases/{{caseId}}/transitions
+Content-Type: application/json
+Authorization: Bearer {{partyToken}}
+
+{
+  "action": "CONFIRM_PAYMENT",
+  "comment": "已完成缴费"
+}
+
+### 6. PAID -> EVIDENCE_SUBMITTING：开启举证
+POST http://localhost:9004/api/cases/{{caseId}}/transitions
+Content-Type: application/json
+Authorization: Bearer {{clerkToken}}
+
+{
+  "action": "OPEN_EVIDENCE",
+  "comment": "开启举证期限"
+}
+
+### 7. EVIDENCE_SUBMITTING -> SCHEDULED：排期开庭
+POST http://localhost:9004/api/cases/{{caseId}}/transitions
+Content-Type: application/json
+Authorization: Bearer {{clerkToken}}
+
+{
+  "action": "SCHEDULE_TRIAL",
+  "comment": "完成开庭排期"
+}
+
+### 8. SCHEDULED -> IN_TRIAL：开始庭审
+POST http://localhost:9004/api/cases/{{caseId}}/transitions
+Content-Type: application/json
+Authorization: Bearer {{judgeToken}}
+
+{
+  "action": "START_TRIAL",
+  "comment": "开始庭审"
+}
+
+### 9. IN_TRIAL -> JUDGEMENT_PENDING：转入待判决
+POST http://localhost:9004/api/cases/{{caseId}}/transitions
+Content-Type: application/json
+Authorization: Bearer {{judgeToken}}
+
+{
+  "action": "JUDGEMENT_PENDING",
+  "comment": "庭审结束，等待裁判"
+}
+
+### 10. JUDGEMENT_PENDING -> JUDGED：发布判决
+POST http://localhost:9004/api/cases/{{caseId}}/transitions
+Content-Type: application/json
+Authorization: Bearer {{judgeToken}}
+
+{
+  "action": "PUBLISH_JUDGEMENT",
+  "comment": "发布判决书"
+}
+
+### 11. JUDGED -> APPEAL_PERIOD：进入上诉期
+POST http://localhost:9004/api/cases/{{caseId}}/transitions
+Content-Type: application/json
+Authorization: Bearer {{clerkToken}}
+
+{
+  "action": "ENTER_APPEAL_PERIOD",
+  "comment": "判决送达，进入上诉期"
+}
+
+### 12. APPEAL_PERIOD -> EFFECTIVE：确认生效
+POST http://localhost:9004/api/cases/{{caseId}}/transitions
+Content-Type: application/json
+Authorization: Bearer {{clerkToken}}
+
+{
+  "action": "CONFIRM_EFFECTIVE",
+  "comment": "上诉期届满未上诉，判决生效"
+}
+
+### 13. EFFECTIVE -> EXECUTION_PENDING：申请执行
+POST http://localhost:9004/api/cases/{{caseId}}/transitions
+Content-Type: application/json
+Authorization: Bearer {{partyToken}}
+
+{
+  "action": "APPLY_EXECUTION",
+  "comment": "申请强制执行"
+}
+
+### 14. EXECUTION_PENDING -> EXECUTING：开始执行
+POST http://localhost:9004/api/cases/{{caseId}}/transitions
+Content-Type: application/json
+Authorization: Bearer {{judgeToken}}
+
+{
+  "action": "START_EXECUTION",
+  "comment": "执行立案"
+}
+
+### 15. EXECUTING -> CLOSED：结案
+POST http://localhost:9004/api/cases/{{caseId}}/transitions
+Content-Type: application/json
+Authorization: Bearer {{judgeToken}}
+
+{
+  "action": "CLOSE",
+  "comment": "执行完毕，案件结案"
+}
