@@ -1,0 +1,68 @@
+server:
+  port: ${TDEP_EVIDENCE_SERVICE_PORT:9003}
+  servlet:
+    context-path: /
+
+spring:
+  application:
+    name: tdep-evidence-service
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: ${TDEP_EVIDENCE_DB_URL:jdbc:mysql://localhost:3306/tdep_evidence?useUnicode=true&characterEncoding=utf8&serverTimezone=Asia/Shanghai&useSSL=false&allowPublicKeyRetrieval=true}
+    username: ${TDEP_EVIDENCE_DB_USERNAME:root}
+    password: ${TDEP_EVIDENCE_DB_PASSWORD:root}
+    hikari:
+      pool-name: TdepEvidenceHikariPool
+      maximum-pool-size: 10
+      minimum-idle: 2
+      connection-timeout: 30000
+  data:
+    redis:
+      host: ${TDEP_REDIS_HOST:localhost}
+      port: ${TDEP_REDIS_PORT:6379}
+      password: ${TDEP_REDIS_PASSWORD:}
+      database: ${TDEP_REDIS_DATABASE:2}
+      timeout: 3000ms
+  jackson:
+    time-zone: Asia/Shanghai
+    date-format: yyyy-MM-dd HH:mm:ss
+
+mybatis-plus:
+  mapper-locations: classpath*:/mapper/**/*.xml
+  type-aliases-package: com.tdep.evidence.entity
+  configuration:
+    map-underscore-to-camel-case: true
+    log-impl: org.apache.ibatis.logging.slf4j.Slf4jImpl
+  global-config:
+    banner: false
+    db-config:
+      id-type: assign_id
+      logic-delete-field: deleted
+      logic-delete-value: 1
+      logic-not-delete-value: 0
+
+tdep:
+  security:
+    jwt:
+      issuer: ${TDEP_JWT_ISSUER:tdep}
+      secret: ${TDEP_JWT_SECRET:tdep-development-secret-key-please-change-in-production}
+      access-token-seconds: ${TDEP_JWT_ACCESS_TOKEN_SECONDS:7200}
+      header: Authorization
+      token-prefix: "Bearer "
+    permit-all-urls:
+      - /actuator/health
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info
+  endpoint:
+    health:
+      probes:
+        enabled: true
+
+logging:
+  level:
+    com.tdep: info
+    org.springframework.security: info
