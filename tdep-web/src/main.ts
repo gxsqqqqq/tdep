@@ -1,18 +1,23 @@
 import ElementPlus from 'element-plus'
 import 'element-plus/dist/index.css'
-
+import * as ElementPlusIconsVue from '@element-plus/icons-vue'
 import { createPinia } from 'pinia'
 import { createApp } from 'vue'
 
 import App from './App.vue'
+import { setupPermissionDirective } from './permission/directive'
 import router from './router'
-import './styles/global.css'
+import './styles/index.css'
 
-// 前端应用入口，统一挂载 Vue、路由、状态管理和组件库。
 const app = createApp(App)
+
+for (const [key, component] of Object.entries(ElementPlusIconsVue)) {
+  app.component(key, component)
+}
 
 app.use(createPinia())
 app.use(router)
 app.use(ElementPlus)
+setupPermissionDirective(app)
 
 app.mount('#app')
