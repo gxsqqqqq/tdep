@@ -10,7 +10,7 @@ spring:
     driver-class-name: com.mysql.cj.jdbc.Driver
     url: ${TDEP_CASE_DB_URL:jdbc:mysql://localhost:3306/tdep_case?useUnicode=true&characterEncoding=utf8&serverTimezone=Asia/Shanghai&useSSL=false&allowPublicKeyRetrieval=true&createDatabaseIfNotExist=true}
     username: ${TDEP_CASE_DB_USERNAME:root}
-    password: ${TDEP_CASE_DB_PASSWORD:root}
+    password: ${TDEP_CASE_DB_PASSWORD:123456}
     hikari:
       pool-name: TdepCaseHikariPool
       maximum-pool-size: 10

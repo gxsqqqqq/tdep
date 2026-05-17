@@ -1,0 +1,26 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(java -version)",
+      "Bash(mvn -version)",
+      "Bash(mysql --version)",
+      "Bash(mysqladmin -u root -proot status)",
+      "Bash(redis-cli ping *)",
+      "Bash(mysql *)",
+      "Bash(netstat -ano)",
+      "Bash(powershell -Command 'Get-NetTCPConnection -State Listen | Where-Object {$_.LocalPort -in @\\(3306,6379,9000\\)} | Select-Object LocalPort,OwningProcess')",
+      "Bash(powershell *)",
+      "Bash(docker --version)",
+      "Bash(where minio *)",
+      "Bash(mvn clean *)",
+      "Bash(cp D:/Projects/Java/TDEP/.infra/redis.zip D:/Projects/Java/TDEP/.infra/redis2.zip)",
+      "Bash(unzip -o redis2.zip -d redis)",
+      "Bash(rm -rf D:/Projects/Java/TDEP/.infra/redis D:/Projects/Java/TDEP/.infra/redis2.zip)",
+      "Bash(jar xf *)",
+      "Bash(curl -L -o D:/Projects/Java/TDEP/.infra/redis.zip \"https://github.com/tporadowski/redis/releases/download/v5.0.14.1/Redis-x64-5.0.14.1.zip\")",
+      "Bash(curl -L -o D:/Projects/Java/TDEP/.infra/minio.exe \"https://dl.min.io/server/minio/release/windows-amd64/minio.exe\")",
+      "Bash(D:/Projects/Java/TDEP/.infra/redis-server.exe *)",
+      "Bash(D:/Projects/Java/TDEP/.infra/minio.exe *)"
+    ]
+  }
+}

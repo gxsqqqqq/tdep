@@ -10,7 +10,7 @@ spring:
     driver-class-name: com.mysql.cj.jdbc.Driver
     url: ${TDEP_DOCUMENT_DB_URL:jdbc:mysql://localhost:3306/tdep_document?useUnicode=true&characterEncoding=utf8&serverTimezone=Asia/Shanghai&useSSL=false&allowPublicKeyRetrieval=true&createDatabaseIfNotExist=true}
     username: ${TDEP_DOCUMENT_DB_USERNAME:root}
-    password: ${TDEP_DOCUMENT_DB_PASSWORD:root}
+    password: ${TDEP_DOCUMENT_DB_PASSWORD:123456}
     hikari:
       pool-name: TdepDocumentHikariPool
       maximum-pool-size: 10
@@ -53,15 +53,15 @@ tdep:
       cron: ${TDEP_DOCUMENT_AUTO_ARCHIVE_CRON:0 0 2 * * ?}
       batch-size: ${TDEP_DOCUMENT_AUTO_ARCHIVE_BATCH_SIZE:100}
     storage:
-      endpoint: ${TDEP_MINIO_ENDPOINT:http://localhost:9000}
-      access-key: ${TDEP_MINIO_ACCESS_KEY:minioadmin}
-      secret-key: ${TDEP_MINIO_SECRET_KEY:minioadmin}
-      template-bucket: ${TDEP_MINIO_DOCUMENT_TEMPLATE_BUCKET:tdep-document-template}
-      word-bucket: ${TDEP_MINIO_DOCUMENT_WORD_BUCKET:tdep-document-word}
-      pdf-bucket: ${TDEP_MINIO_DOCUMENT_PDF_BUCKET:tdep-document-pdf}
-      signed-bucket: ${TDEP_MINIO_DOCUMENT_SIGNED_BUCKET:tdep-document-signed}
-      archive-bucket: ${TDEP_MINIO_DOCUMENT_ARCHIVE_BUCKET:tdep-document-archive}
-      presigned-url-seconds: ${TDEP_MINIO_PRESIGNED_URL_SECONDS:900}
+      endpoint: ${TDEP_OSS_ENDPOINT:oss-cn-hangzhou.aliyuncs.com}
+      access-key-id: ${TDEP_OSS_ACCESS_KEY_ID:id}
+      access-key-secret: ${TDEP_OSS_ACCESS_KEY_SECRET:secret}
+      template-bucket: ${TDEP_OSS_DOCUMENT_TEMPLATE_BUCKET:tdep-document-template}
+      word-bucket: ${TDEP_OSS_DOCUMENT_WORD_BUCKET:tdep-document-word}
+      pdf-bucket: ${TDEP_OSS_DOCUMENT_PDF_BUCKET:tdep-document-pdf}
+      signed-bucket: ${TDEP_OSS_DOCUMENT_SIGNED_BUCKET:tdep-document-signed}
+      archive-bucket: ${TDEP_OSS_DOCUMENT_ARCHIVE_BUCKET:tdep-document-archive}
+      presigned-url-seconds: ${TDEP_OSS_PRESIGNED_URL_SECONDS:900}
   security:
     jwt:
       issuer: ${TDEP_JWT_ISSUER:tdep}

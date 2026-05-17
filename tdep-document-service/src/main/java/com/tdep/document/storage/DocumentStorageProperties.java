@@ -7,11 +7,11 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 @ConfigurationProperties(prefix = "tdep.document.storage")
 public class DocumentStorageProperties {
 
-    private String endpoint = "http://localhost:9000";
+    private String endpoint = "oss-cn-hangzhou.aliyuncs.com";
 
-    private String accessKey = "minioadmin";
+    private String accessKeyId = "your-access-key-id";
 
-    private String secretKey = "minioadmin";
+    private String accessKeySecret = "your-access-key-secret";
 
     private String templateBucket = "tdep-document-template";
 

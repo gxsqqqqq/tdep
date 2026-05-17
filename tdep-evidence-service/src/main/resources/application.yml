@@ -10,7 +10,7 @@ spring:
     driver-class-name: com.mysql.cj.jdbc.Driver
     url: ${TDEP_EVIDENCE_DB_URL:jdbc:mysql://localhost:3306/tdep_evidence?useUnicode=true&characterEncoding=utf8&serverTimezone=Asia/Shanghai&useSSL=false&allowPublicKeyRetrieval=true&createDatabaseIfNotExist=true}
     username: ${TDEP_EVIDENCE_DB_USERNAME:root}
-    password: ${TDEP_EVIDENCE_DB_PASSWORD:root}
+    password: ${TDEP_EVIDENCE_DB_PASSWORD:123456}
     hikari:
       pool-name: TdepEvidenceHikariPool
       maximum-pool-size: 10
@@ -53,14 +53,14 @@ mybatis-plus:
 tdep:
   evidence:
     storage:
-      endpoint: ${TDEP_MINIO_ENDPOINT:http://localhost:9000}
-      access-key: ${TDEP_MINIO_ACCESS_KEY:minioadmin}
-      secret-key: ${TDEP_MINIO_SECRET_KEY:minioadmin}
-      original-bucket: ${TDEP_MINIO_EVIDENCE_ORIGINAL_BUCKET:tdep-evidence-original}
-      sealed-bucket: ${TDEP_MINIO_EVIDENCE_SEALED_BUCKET:tdep-evidence-sealed}
-      temp-bucket: ${TDEP_MINIO_EVIDENCE_TEMP_BUCKET:tdep-evidence-temp}
-      preview-bucket: ${TDEP_MINIO_EVIDENCE_PREVIEW_BUCKET:tdep-evidence-preview}
-      presigned-url-seconds: ${TDEP_MINIO_PRESIGNED_URL_SECONDS:900}
+      endpoint: ${TDEP_OSS_ENDPOINT:oss-cn-hangzhou.aliyuncs.com}
+      access-key-id: ${TDEP_OSS_ACCESS_KEY_ID:your-access-key-id}
+      access-key-secret: ${TDEP_OSS_ACCESS_KEY_SECRET:your-access-key-secret}
+      original-bucket: ${TDEP_OSS_EVIDENCE_ORIGINAL_BUCKET:tdep-evidence-original}
+      sealed-bucket: ${TDEP_OSS_EVIDENCE_SEALED_BUCKET:tdep-evidence-sealed}
+      temp-bucket: ${TDEP_OSS_EVIDENCE_TEMP_BUCKET:tdep-evidence-temp}
+      preview-bucket: ${TDEP_OSS_EVIDENCE_PREVIEW_BUCKET:tdep-evidence-preview}
+      presigned-url-seconds: ${TDEP_OSS_PRESIGNED_URL_SECONDS:900}
   security:
     jwt:
       issuer: ${TDEP_JWT_ISSUER:tdep}
