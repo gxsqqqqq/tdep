@@ -51,6 +51,5 @@ public class CasePartyDTO {
     /**
      * 绑定平台用户编号。
      */
-    @NotNull(message = "不能为空")
     private Long userId;
 }

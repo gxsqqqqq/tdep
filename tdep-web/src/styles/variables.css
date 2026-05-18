@@ -1,0 +1,57 @@
+:root {
+  /* 主色调 — 科技蓝 */
+  --color-primary: #1a73e8;
+  --color-primary-light: #4a90d9;
+  --color-primary-dark: #0d47a1;
+  --color-primary-bg: #e8f0fe;
+  --color-primary-hover: #1557b0;
+
+  /* 辅助色 */
+  --color-success: #34a853;
+  --color-success-bg: #e6f4ea;
+  --color-warning: #fbbc04;
+  --color-warning-bg: #fef7e0;
+  --color-danger: #ea4335;
+  --color-danger-bg: #fce8e6;
+  --color-info: #9aa0a6;
+  --color-info-bg: #f1f3f4;
+
+  /* 背景 */
+  --bg-page: #f0f4f8;
+  --bg-card: #ffffff;
+  --bg-header: #ffffff;
+
+  /* 文字 */
+  --text-primary: #202124;
+  --text-secondary: #5f6368;
+  --text-hint: #9aa0a6;
+  --text-inverse: #ffffff;
+
+  /* 边框 */
+  --border-color: #e0e4e8;
+  --border-radius: 12px;
+  --border-radius-sm: 8px;
+  --border-radius-xs: 4px;
+
+  /* 阴影 */
+  --shadow-card: 0 1px 3px rgba(0, 0, 0, 0.08), 0 1px 2px rgba(0, 0, 0, 0.06);
+  --shadow-card-hover: 0 4px 12px rgba(0, 0, 0, 0.1);
+  --shadow-header: 0 1px 4px rgba(0, 0, 0, 0.06);
+
+  /* 间距 */
+  --spacing-page: 24px;
+  --spacing-card: 20px;
+  --spacing-sm: 12px;
+  --spacing-xs: 8px;
+
+  /* 字号 */
+  --font-size-title: 20px;
+  --font-size-subtitle: 16px;
+  --font-size-body: 15px;
+  --font-size-caption: 13px;
+  --font-size-small: 12px;
+
+  /* 布局 */
+  --header-height: 60px;
+  --content-max-width: 1200px;
+}

@@ -71,7 +71,8 @@ public class AuthServiceImpl implements AuthService {
         user.setStatus(ENABLED);
         sysUserMapper.insert(user);
 
-        bindDefaultRole(user.getId());
+        String roleCode = StringUtils.hasText(request.getRoleCode()) ? request.getRoleCode() : DEFAULT_ROLE_CODE;
+        bindRole(user.getId(), roleCode);
         return buildUserInfo(user, rbacService.listRoleCodesByUserId(user.getId()), rbacService.listPermissionCodesByUserId(user.getId()));
     }
 
@@ -153,17 +154,18 @@ public class AuthServiceImpl implements AuthService {
     }
 
     /**
-     * 为新用户绑定默认角色。
+     * 为新用户绑定指定角色。
      *
-     * @param userId 用户主键
+     * @param userId   用户主键
+     * @param roleCode 角色编码
      */
-    private void bindDefaultRole(Long userId) {
+    private void bindRole(Long userId, String roleCode) {
         SysRole role = sysRoleMapper.selectOne(new LambdaQueryWrapper<SysRole>()
-                .eq(SysRole::getRoleCode, DEFAULT_ROLE_CODE)
+                .eq(SysRole::getRoleCode, roleCode)
                 .eq(SysRole::getStatus, ENABLED)
                 .last("LIMIT 1"));
         if (role == null) {
-            throw new BusinessException(ResultCode.INTERNAL_ERROR, "默认角色未初始化");
+            throw new BusinessException(ResultCode.BAD_REQUEST, "角色不存在或已禁用：" + roleCode);
         }
 
         SysUserRole userRole = new SysUserRole();

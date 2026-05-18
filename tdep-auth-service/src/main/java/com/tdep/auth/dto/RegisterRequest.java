@@ -45,4 +45,10 @@ public class RegisterRequest {
     @Email(message = "格式不正确")
     @Size(max = 128, message = "长度不能超过 128 位")
     private String email;
+
+    /**
+     * 角色编码，如 USER、JUDGE，为空时默认 USER。
+     */
+    @Size(max = 32, message = "长度不能超过 32 位")
+    private String roleCode;
 }

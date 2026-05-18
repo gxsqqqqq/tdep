@@ -20,7 +20,7 @@ import java.util.Map;
 @Primary
 @Service
 @RequiredArgsConstructor
-public class MinioDocumentArchiveService implements DocumentArchiveService {
+public class OssDocumentArchiveService implements DocumentArchiveService {
 
     private static final DateTimeFormatter DATE_FORMATTER = DateTimeFormatter.BASIC_ISO_DATE;
 

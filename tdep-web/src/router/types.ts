@@ -13,7 +13,7 @@ export interface AppRouteRecord {
   path: string
   name?: string
   component?: unknown
-  redirect?: string
+  redirect?: string | ((...args: unknown[]) => { name: string; params: Record<string, unknown> })
   meta?: RouteMetaPermission
   children?: AppRouteRecord[]
 }

@@ -1,5 +1,5 @@
 server:
-  port: ${TDEP_EVIDENCE_SERVICE_PORT:9003}
+  port: 9003
   servlet:
     context-path: /
 
@@ -8,9 +8,9 @@ spring:
     name: tdep-evidence-service
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: ${TDEP_EVIDENCE_DB_URL:jdbc:mysql://localhost:3306/tdep_evidence?useUnicode=true&characterEncoding=utf8&serverTimezone=Asia/Shanghai&useSSL=false&allowPublicKeyRetrieval=true&createDatabaseIfNotExist=true}
-    username: ${TDEP_EVIDENCE_DB_USERNAME:root}
-    password: ${TDEP_EVIDENCE_DB_PASSWORD:123456}
+    url: jdbc:mysql://localhost:3306/tdep_evidence?useUnicode=true&characterEncoding=utf8&serverTimezone=Asia/Shanghai&useSSL=false&allowPublicKeyRetrieval=true&createDatabaseIfNotExist=true
+    username: root
+    password: 123456
     hikari:
       pool-name: TdepEvidenceHikariPool
       maximum-pool-size: 10
@@ -18,19 +18,19 @@ spring:
       connection-timeout: 30000
   sql:
     init:
-      mode: ${TDEP_EVIDENCE_SQL_INIT_MODE:always}
+      mode: always
       encoding: UTF-8
       schema-locations: classpath:schema.sql
   servlet:
     multipart:
-      max-file-size: ${TDEP_EVIDENCE_MAX_FILE_SIZE:200MB}
-      max-request-size: ${TDEP_EVIDENCE_MAX_REQUEST_SIZE:220MB}
+      max-file-size: 200MB
+      max-request-size: 220MB
   data:
     redis:
-      host: ${TDEP_REDIS_HOST:localhost}
-      port: ${TDEP_REDIS_PORT:6379}
-      password: ${TDEP_REDIS_PASSWORD:}
-      database: ${TDEP_REDIS_DATABASE:2}
+      host: localhost
+      port: 6379
+      password:
+      database: 2
       timeout: 3000ms
   jackson:
     time-zone: Asia/Shanghai
@@ -53,19 +53,19 @@ mybatis-plus:
 tdep:
   evidence:
     storage:
-      endpoint: ${TDEP_OSS_ENDPOINT:oss-cn-hangzhou.aliyuncs.com}
-      access-key-id: ${TDEP_OSS_ACCESS_KEY_ID:your-access-key-id}
-      access-key-secret: ${TDEP_OSS_ACCESS_KEY_SECRET:your-access-key-secret}
-      original-bucket: ${TDEP_OSS_EVIDENCE_ORIGINAL_BUCKET:tdep-evidence-original}
-      sealed-bucket: ${TDEP_OSS_EVIDENCE_SEALED_BUCKET:tdep-evidence-sealed}
-      temp-bucket: ${TDEP_OSS_EVIDENCE_TEMP_BUCKET:tdep-evidence-temp}
-      preview-bucket: ${TDEP_OSS_EVIDENCE_PREVIEW_BUCKET:tdep-evidence-preview}
-      presigned-url-seconds: ${TDEP_OSS_PRESIGNED_URL_SECONDS:900}
+      endpoint: oss-cn-hangzhou.aliyuncs.com
+      access-key-id: your-access-key-id
+      access-key-secret: your-access-key-secret
+      original-bucket: tdep-evidence-original
+      sealed-bucket: tdep-evidence-sealed
+      temp-bucket: tdep-evidence-temp
+      preview-bucket: tdep-evidence-preview
+      presigned-url-seconds: 900
   security:
     jwt:
-      issuer: ${TDEP_JWT_ISSUER:tdep}
-      secret: ${TDEP_JWT_SECRET:tdep-development-secret-key-please-change-in-production}
-      access-token-seconds: ${TDEP_JWT_ACCESS_TOKEN_SECONDS:7200}
+      issuer: tdep
+      secret: tdep-development-secret-key-please-change-in-production
+      access-token-seconds: 7200
       header: Authorization
       token-prefix: "Bearer "
     permit-all-urls:

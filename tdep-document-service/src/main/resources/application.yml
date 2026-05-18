@@ -1,5 +1,5 @@
 server:
-  port: ${TDEP_DOCUMENT_SERVICE_PORT:9006}
+  port: 9006
   servlet:
     context-path: /
 
@@ -8,9 +8,9 @@ spring:
     name: tdep-document-service
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: ${TDEP_DOCUMENT_DB_URL:jdbc:mysql://localhost:3306/tdep_document?useUnicode=true&characterEncoding=utf8&serverTimezone=Asia/Shanghai&useSSL=false&allowPublicKeyRetrieval=true&createDatabaseIfNotExist=true}
-    username: ${TDEP_DOCUMENT_DB_USERNAME:root}
-    password: ${TDEP_DOCUMENT_DB_PASSWORD:123456}
+    url: jdbc:mysql://localhost:3306/tdep_document?useUnicode=true&characterEncoding=utf8&serverTimezone=Asia/Shanghai&useSSL=false&allowPublicKeyRetrieval=true&createDatabaseIfNotExist=true
+    username: root
+    password: 123456
     hikari:
       pool-name: TdepDocumentHikariPool
       maximum-pool-size: 10
@@ -18,15 +18,15 @@ spring:
       connection-timeout: 30000
   sql:
     init:
-      mode: ${TDEP_DOCUMENT_SQL_INIT_MODE:always}
+      mode: always
       encoding: UTF-8
       schema-locations: classpath:schema.sql
   data:
     redis:
-      host: ${TDEP_REDIS_HOST:localhost}
-      port: ${TDEP_REDIS_PORT:6379}
-      password: ${TDEP_REDIS_PASSWORD:}
-      database: ${TDEP_REDIS_DATABASE:4}
+      host: localhost
+      port: 6379
+      password:
+      database: 4
       timeout: 3000ms
   jackson:
     time-zone: Asia/Shanghai
@@ -49,24 +49,24 @@ mybatis-plus:
 tdep:
   document:
     archive:
-      auto-enabled: ${TDEP_DOCUMENT_AUTO_ARCHIVE_ENABLED:false}
-      cron: ${TDEP_DOCUMENT_AUTO_ARCHIVE_CRON:0 0 2 * * ?}
-      batch-size: ${TDEP_DOCUMENT_AUTO_ARCHIVE_BATCH_SIZE:100}
+      auto-enabled: false
+      cron: 0 0 2 * * ?
+      batch-size: 100
     storage:
-      endpoint: ${TDEP_OSS_ENDPOINT:oss-cn-hangzhou.aliyuncs.com}
-      access-key-id: ${TDEP_OSS_ACCESS_KEY_ID:id}
-      access-key-secret: ${TDEP_OSS_ACCESS_KEY_SECRET:secret}
-      template-bucket: ${TDEP_OSS_DOCUMENT_TEMPLATE_BUCKET:tdep-document-template}
-      word-bucket: ${TDEP_OSS_DOCUMENT_WORD_BUCKET:tdep-document-word}
-      pdf-bucket: ${TDEP_OSS_DOCUMENT_PDF_BUCKET:tdep-document-pdf}
-      signed-bucket: ${TDEP_OSS_DOCUMENT_SIGNED_BUCKET:tdep-document-signed}
-      archive-bucket: ${TDEP_OSS_DOCUMENT_ARCHIVE_BUCKET:tdep-document-archive}
-      presigned-url-seconds: ${TDEP_OSS_PRESIGNED_URL_SECONDS:900}
+      endpoint: oss-cn-hangzhou.aliyuncs.com
+      access-key-id: id
+      access-key-secret: scecret
+      template-bucket: tdep-document-template
+      word-bucket: tdep-document-word
+      pdf-bucket: tdep-document-pdf
+      signed-bucket: tdep-document-signed
+      archive-bucket: tdep-document-archive
+      presigned-url-seconds: 900
   security:
     jwt:
-      issuer: ${TDEP_JWT_ISSUER:tdep}
-      secret: ${TDEP_JWT_SECRET:tdep-development-secret-key-please-change-in-production}
-      access-token-seconds: ${TDEP_JWT_ACCESS_TOKEN_SECONDS:7200}
+      issuer: tdep
+      secret: tdep-development-secret-key-please-change-in-production
+      access-token-seconds: 7200
       header: Authorization
       token-prefix: "Bearer "
     permit-all-urls:

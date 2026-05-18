@@ -2,7 +2,6 @@ import { createRouter, createWebHistory, type RouteRecordRaw } from 'vue-router'
 
 import { useAuthStore } from '@/stores/auth'
 import { usePermissionStore } from '@/stores/permission'
-import { useTabsStore } from '@/stores/tabs'
 
 import { constantRoutes } from './routes'
 
@@ -21,7 +20,8 @@ router.beforeEach(async (to) => {
 
   if (whiteList.includes(to.path)) {
     if (to.path === '/login' && authStore.isAuthenticated) {
-      return '/dashboard'
+      const isAdmin = authStore.roles.includes('ADMIN')
+      return isAdmin ? '/admin/dashboard' : '/my-cases'
     }
     return true
   }
@@ -47,11 +47,6 @@ router.beforeEach(async (to) => {
   }
 
   return true
-})
-
-router.afterEach((to) => {
-  const tabsStore = useTabsStore()
-  tabsStore.add(to)
 })
 
 export default router

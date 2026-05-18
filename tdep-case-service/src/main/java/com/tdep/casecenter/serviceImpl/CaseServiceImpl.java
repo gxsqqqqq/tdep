@@ -99,7 +99,11 @@ public class CaseServiceImpl implements CaseService {
             party.setIdentityNo(partyDTO.getIdentityNo());
             party.setContactPhone(partyDTO.getContactPhone());
             party.setContactAddress(partyDTO.getContactAddress());
-            party.setUserId(partyDTO.getUserId());
+            if (partyDTO.getUserId() == null) {
+                party.setUserId(principal.getUserId());
+            } else {
+                party.setUserId(partyDTO.getUserId());
+            }
             casePartyMapper.insert(party);
         }
         recordProcess(caseInfo.getId(), null, CaseStatus.DRAFT, "CREATE", "创建案件草稿", CaseRole.PARTY.name());

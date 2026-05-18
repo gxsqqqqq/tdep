@@ -1,5 +1,5 @@
 server:
-  port: ${TDEP_GATEWAY_PORT:8080}
+  port: 8080
 
 spring:
   application:
@@ -11,47 +11,53 @@ spring:
         - AddRequestHeader=X-TDEP-Gateway, tdep-gateway
       routes:
         - id: tdep-auth-service
-          uri: ${TDEP_AUTH_SERVICE_URI:http://localhost:9001}
+          uri: http://localhost:9001
           predicates:
             - Path=/api/auth/**
           filters:
             - StripPrefix=1
         - id: tdep-user-service
-          uri: ${TDEP_USER_SERVICE_URI:http://localhost:9002}
+          uri: http://localhost:9002
           predicates:
             - Path=/api/users/**
           filters:
             - StripPrefix=1
         - id: tdep-evidence-service
-          uri: ${TDEP_EVIDENCE_SERVICE_URI:http://localhost:9003}
+          uri: http://localhost:9003
           predicates:
             - Path=/api/evidences/**
           filters:
             - StripPrefix=1
         - id: tdep-case-service
-          uri: ${TDEP_CASE_SERVICE_URI:http://localhost:9004}
+          uri: http://localhost:9004
           predicates:
             - Path=/api/cases/**
           filters:
             - StripPrefix=1
         - id: tdep-document-service
-          uri: ${TDEP_DOCUMENT_SERVICE_URI:http://localhost:9006}
+          uri: http://localhost:9006
           predicates:
             - Path=/api/document/**,/api/documents/**,/api/template/**
           filters:
             - StripPrefix=1
         - id: tdep-ai-service
-          uri: ${TDEP_AI_SERVICE_URI:http://localhost:9005}
+          uri: http://localhost:9005
           predicates:
             - Path=/api/ai/**
+          filters:
+            - StripPrefix=1
+        - id: tdep-notify-service
+          uri: http://localhost:9007
+          predicates:
+            - Path=/api/notify/**
           filters:
             - StripPrefix=1
 
 tdep:
   gateway:
     security:
-      issuer: ${TDEP_JWT_ISSUER:tdep}
-      secret: ${TDEP_JWT_SECRET:tdep-development-secret-key-please-change-in-production}
+      issuer: tdep
+      secret: tdep-development-secret-key-please-change-in-production
       header: Authorization
       token-prefix: "Bearer "
       permit-all-urls:

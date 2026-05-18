@@ -22,7 +22,7 @@ export function filterRoutes(routes: AppRouteRecord[], roles: string[], permissi
 export function routesToMenus(routes: AppRouteRecord[]): MenuItem[] {
   return routes.flatMap((route) => {
     const children = route.children?.filter((child) => !child.meta?.hidden) || []
-    if (route.path === '/' && children.length) {
+    if ((route.path === '/' || route.path === '/admin') && children.length) {
       return children.map(toMenuItem)
     }
     if (route.meta?.hidden) return []

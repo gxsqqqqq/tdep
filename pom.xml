@@ -21,6 +21,7 @@
         <module>tdep-case-service</module>
         <module>tdep-document-service</module>
         <module>tdep-ai-service</module>
+        <module>tdep-notify-service</module>
     </modules>
 
     <properties>
@@ -95,6 +96,7 @@
                     <configuration>
                         <release>${java.version}</release>
                         <encoding>${project.build.sourceEncoding}</encoding>
+                        <parameters>true</parameters>
                         <annotationProcessorPaths>
                             <path>
                                 <groupId>org.projectlombok</groupId>

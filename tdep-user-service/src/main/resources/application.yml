@@ -1,5 +1,5 @@
 server:
-  port: ${TDEP_USER_SERVICE_PORT:9002}
+  port: 9002
   servlet:
     context-path: /
 
@@ -8,9 +8,9 @@ spring:
     name: tdep-user-service
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: ${TDEP_USER_DB_URL:jdbc:mysql://localhost:3306/tdep_user?useUnicode=true&characterEncoding=utf8&serverTimezone=Asia/Shanghai&useSSL=false&allowPublicKeyRetrieval=true}
-    username: ${TDEP_USER_DB_USERNAME:root}
-    password: ${TDEP_USER_DB_PASSWORD:123456}
+    url: jdbc:mysql://localhost:3306/tdep_user?useUnicode=true&characterEncoding=utf8&serverTimezone=Asia/Shanghai&useSSL=false&allowPublicKeyRetrieval=true
+    username: root
+    password: 123456
     hikari:
       pool-name: TdepUserHikariPool
       maximum-pool-size: 10
@@ -18,10 +18,10 @@ spring:
       connection-timeout: 30000
   data:
     redis:
-      host: ${TDEP_REDIS_HOST:localhost}
-      port: ${TDEP_REDIS_PORT:6379}
-      password: ${TDEP_REDIS_PASSWORD:}
-      database: ${TDEP_REDIS_DATABASE:1}
+      host: localhost
+      port: 6379
+      password:
+      database: 1
       timeout: 3000ms
   jackson:
     time-zone: Asia/Shanghai
@@ -44,9 +44,9 @@ mybatis-plus:
 tdep:
   security:
     jwt:
-      issuer: ${TDEP_JWT_ISSUER:tdep}
-      secret: ${TDEP_JWT_SECRET:tdep-development-secret-key-please-change-in-production}
-      access-token-seconds: ${TDEP_JWT_ACCESS_TOKEN_SECONDS:7200}
+      issuer: tdep
+      secret: tdep-development-secret-key-please-change-in-production
+      access-token-seconds: 7200
       header: Authorization
       token-prefix: "Bearer "
     permit-all-urls:

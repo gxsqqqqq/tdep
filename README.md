@@ -10,12 +10,13 @@ TDEP 是一个面向可信数字证据场景的企业后台系统，覆盖认证
 | --- | --- | --- |
 | `tdep-common` | 公共返回体、异常处理、TraceId、JWT 安全组件、MyBatis Plus 配置 | - |
 | `tdep-gateway` | API 网关，统一鉴权、路由转发、用户上下文透传 | `8080` |
-| `tdep-auth-service` | 登录、注册、退出、JWT 签发、基础 RBAC 读取 | `9001` |
+| `tdep-auth-service` | 登录、注册、退出、JWT 签发、RBAC 权限管理 | `9001` |
 | `tdep-user-service` | 用户服务占位模块 | `9002` |
 | `tdep-evidence-service` | 电子证据上传、Hash、固化、下载、证据链、操作日志 | `9003` |
 | `tdep-case-service` | 案件创建、分页、详情、状态流转、审判相关能力 | `9004` |
 | `tdep-ai-service` | AI 能力服务占位/扩展模块 | `9005` |
 | `tdep-document-service` | 文书模板、文书生成、PDF 导出、签章、归档 | `9006` |
+| `tdep-notify-service` | 站内消息通知、已读状态管理、未读计数 | `9007` |
 | `tdep-web` | Vue 3 企业后台前端 | `5173` |
 
 ## 技术栈
@@ -28,9 +29,9 @@ TDEP 是一个面向可信数字证据场景的企业后台系统，覆盖认证
 - Spring Security
 - MyBatis Plus 3.5.7
 - JJWT 0.12.5
-- MySQL
-- Redis
-- MinIO
+- MySQL 8+
+- Redis 6+
+- 阿里云 OSS (对象存储)
 
 前端：
 
@@ -52,7 +53,6 @@ TDEP 是一个面向可信数字证据场景的企业后台系统，覆盖认证
 - Node.js 18+
 - MySQL 8+
 - Redis 6+
-- MinIO
 
 默认数据库由各服务 `application.yml` 指定：
 
@@ -62,23 +62,20 @@ TDEP 是一个面向可信数字证据场景的企业后台系统，覆盖认证
 | `tdep-case-service` | `tdep_case` |
 | `tdep-evidence-service` | `tdep_evidence` |
 | `tdep-document-service` | `tdep_document` |
-| `tdep-ai-service` | `tdep_ai` |
+| `tdep-notify-service` | `tdep_notify` |
 
-大多数服务默认数据库账号为 `root/root`，可通过环境变量覆盖。`tdep-ai-service` 当前配置为 `roto/123456`，如需本地启动请按实际 MySQL 用户调整。
+所有服务默认数据库账号为 `root/123456`，配置已硬编码在 `application.yml` 中。
 
-## 常用环境变量
+## 配置说明
 
-| 变量 | 说明 | 默认值 |
-| --- | --- | --- |
-| `TDEP_JWT_SECRET` | JWT 签名密钥 | `tdep-development-secret-key-please-change-in-production` |
-| `TDEP_REDIS_HOST` | Redis 地址 | `localhost` |
-| `TDEP_REDIS_PORT` | Redis 端口 | `6379` |
-| `TDEP_MINIO_ENDPOINT` | MinIO 地址 | `http://localhost:9000` |
-| `TDEP_MINIO_ACCESS_KEY` | MinIO Access Key | `minioadmin` |
-| `TDEP_MINIO_SECRET_KEY` | MinIO Secret Key | `minioadmin` |
-| `TDEP_GATEWAY_PORT` | 网关端口 | `8080` |
+所有服务的配置已硬编码在各自的 `application.yml` 文件中，包括：
 
-各服务数据库连接也可以通过 `TDEP_AUTH_DB_URL`、`TDEP_CASE_DB_URL`、`TDEP_EVIDENCE_DB_URL`、`TDEP_DOCUMENT_DB_URL` 等变量覆盖。
+- 数据库连接 (MySQL)
+- Redis 连接
+- JWT 密钥
+- 阿里云 OSS 配置
+
+如需修改配置，直接编辑对应服务的 `application.yml` 文件即可。
 
 ## 构建
 
@@ -140,9 +137,11 @@ npm run dev
 
 默认管理员账号：
 
-| 用户名 | 密码 |
-| --- | --- |
-| `admin` | `Admin@123456` |
+| 用户名 | 密码 | 角色 |
+| --- | --- | --- |
+| `admin` | `Admin@123456` | 系统管理员 |
+
+注册用户可选择「普通用户」或「法官」身份。
 
 ## 网关路由
 
@@ -155,6 +154,7 @@ npm run dev
 | `/api/document/**` | `tdep-document-service` |
 | `/api/documents/**` | `tdep-document-service` |
 | `/api/template/**` | `tdep-document-service` |
+| `/api/notify/**` | `tdep-notify-service` |
 | `/api/ai/**` | `tdep-ai-service` |
 
 网关白名单：
@@ -173,7 +173,7 @@ Authorization: Bearer <accessToken>
 
 当前 `tdep-web` 已包含：
 
-- 登录页
+- 登录页、注册页（支持 USER/JUDGE 角色选择）
 - 主布局、侧边菜单、顶部栏、面包屑、多标签页
 - 动态路由与权限过滤
 - 工作台仪表盘
@@ -181,12 +181,11 @@ Authorization: Bearer <accessToken>
 - 证据列表、上传、校验、下载地址打开
 - 文书生成、预览、下载、签章
 - 文书模板列表和上传
-- 通知中心页面
+- 通知中心页面（已对接后端通知服务）
 
 已知边界：
 
-- 通知服务当前仓库未提供后端模块，前端通知查询对 `404/503` 做空数据降级。
-- 系统用户管理、通知日志、案件详情独立页仍为占位或待扩展功能。
+- 系统用户管理、案件详情独立页仍为占位或待扩展功能。
 - 文书分页列表接口尚未提供，前端文书页仅展示当前会话生成结果。
 
 ## 统一响应格式
@@ -225,7 +224,19 @@ X-TDEP-Trace-Id: <uuid>
 - `sys_user_role`
 - `sys_role_permission`
 
-登录成功后，`auth-service` 会把用户角色和权限写入 JWT。各业务服务使用 `@PreAuthorize` 做方法级鉴权。
+### 角色说明
+
+| 角色 | 编码 | 说明 |
+| --- | --- | --- |
+| 系统管理员 | `ADMIN` | 拥有全部权限 |
+| 普通用户 | `USER` | 案件创建、证据上传、文书管理等基础权限 |
+| 法官 | `JUDGE` | 案件审理、证据验证、文书签章等审判权限 |
+
+### 注册功能
+
+用户注册时可选择身份类型（普通用户/法官），系统会自动分配对应角色。
+
+登录成功后，`auth-service` 会把用户角色和权限写入 JWT。前端根据权限动态过滤路由菜单。
 
 后续系统管理模块建议新增 `tdep-system-service`，由该服务管理用户、角色、菜单、按钮权限、字典、参数、操作日志和审计日志；`auth-service` 保持认证与签发职责。
 
@@ -238,4 +249,5 @@ X-TDEP-Trace-Id: <uuid>
 - 后端统一使用 Java 17 和 UTF-8 编码。
 - 业务服务优先通过网关访问，避免前端直连服务端口。
 - 修改角色权限后，已签发 JWT 不会自动更新，用户需重新登录后生效。
-- 生产环境必须覆盖默认 JWT 密钥、数据库密码和 MinIO 密钥。
+- 网关使用 `StripPrefix=1`，会自动去除路径中的 `/api` 前缀，因此各服务 Controller 需同时映射 `/api/xxx` 和 `/xxx` 两个路径。
+- 生产环境必须修改默认 JWT 密钥、数据库密码和阿里云 OSS 配置。

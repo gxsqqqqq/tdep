@@ -3,11 +3,12 @@
     <el-button :icon="appStore.sidebarCollapsed ? Expand : Fold" text @click="appStore.toggleSidebar()" />
     <div>
       <strong>{{ route.meta.title || '工作台' }}</strong>
-      <small>Trusted Digital Evidence Platform</small>
+      <small>管理后台</small>
     </div>
   </div>
 
   <div class="header-actions">
+    <el-button text @click="$router.push('/my-cases')">返回前台</el-button>
     <NotifyPopover />
     <el-button :icon="appStore.darkMode ? Sunny : Moon" circle @click="appStore.toggleDarkMode()" />
     <el-dropdown @command="handleCommand">
