@@ -1,0 +1,120 @@
+/* ============================================
+   TDEP Digital Judicial Platform
+   Dark Mode Design Tokens
+   ============================================ */
+
+/* ---- Light Mode (Default) ---- */
+:root {
+  /* 背景色 */
+  --color-bg-primary: #f0f9ff;
+  --color-bg-secondary: #ffffff;
+  --color-bg-tertiary: #f8fafc;
+  --color-bg-elevated: #ffffff;
+  --color-bg-inverse: #1e293b;
+
+  /* 文字色 */
+  --color-text-primary: #0f172a;
+  --color-text-secondary: #475569;
+  --color-text-tertiary: #94a3b8;
+  --color-text-inverse: #f8fafc;
+
+  /* 边框色 */
+  --color-border-primary: #e2e8f0;
+  --color-border-secondary: #f1f5f9;
+  --color-border-strong: #cbd5e1;
+
+  /* 主色调 - 司法蓝 */
+  --color-primary-50: #eff6ff;
+  --color-primary-100: #dbeafe;
+  --color-primary-200: #bfdbfe;
+  --color-primary-300: #93c5fd;
+  --color-primary-400: #60a5fa;
+  --color-primary-500: #3b82f6;
+  --color-primary-600: #2563eb;
+  --color-primary-700: #1d4ed8;
+  --color-primary-800: #1e40af;
+  --color-primary-900: #1e3a8c;
+  --color-primary-950: #0c1929;
+
+  /* 强调色 - 法徽金 */
+  --color-gold-400: #fbbf24;
+  --color-gold-500: #f59e0b;
+  --color-gold-600: #d97706;
+
+  /* 成功色 */
+  --color-success: #059669;
+  --color-success-light: #d1fae5;
+
+  /* 危险色 */
+  --color-danger: #dc2626;
+  --color-danger-light: #fee2e2;
+
+  /* 阴影 */
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
+  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+  --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+
+  /* 特殊阴影 - 司法主题 */
+  --shadow-judicial: 0 4px 14px 0 rgba(30, 58, 95, 0.15);
+  --shadow-seal: 0 0 20px 5px rgba(217, 119, 6, 0.3);
+  --shadow-blockchain: 0 0 15px 3px rgba(124, 58, 237, 0.2);
+
+  /* 卡片背景 */
+  --card-bg: #ffffff;
+  --card-border: #e2e8f0;
+
+  /* 输入框背景 */
+  --input-bg: #ffffff;
+  --input-border: #d1d5db;
+  --input-focus-ring: #3b82f6;
+
+  /* 代码块/Hash 背景 */
+  --code-bg: #0f172a;
+  --code-text: #10b981;
+}
+
+/* ---- Dark Mode ---- */
+.dark,
+[data-theme="dark"] {
+  /* 背景色 - 深色系 */
+  --color-bg-primary: #0f172a;
+  --color-bg-secondary: #1e293b;
+  --color-bg-tertiary: #334155;
+  --color-bg-elevated: #1e293b;
+  --color-bg-inverse: #f8fafc;
+
+  /* 文字色 - 浅色系 */
+  --color-text-primary: #f1f5f9;
+  --color-text-secondary: #94a3b8;
+  --color-text-tertiary: #64748b;
+  --color-text-inverse: #0f172a;
+
+  /* 边框色 - 暗色系 */
+  --color-border-primary: #334155;
+  --color-border-secondary: #1e293b;
+  --color-border-strong: #475569;
+
+  /* 主色调 - 司法蓝（保持不变或微调） */
+  --color-primary-400: #60a5fa;
+  --color-primary-500: #3b82f6;
+  --color-primary-600: #2563eb;
+
+  /* 法徽金 - 增强发光效果 */
+  --shadow-judicial: 0 4px 14px 0 rgba(30, 58, 95, 0.4);
+  --shadow-seal: 0 0 20px 5px rgba(217, 119, 6, 0.5);
+  --shadow-blockchain: 0 0 15px 3px rgba(124, 58, 237, 0.35);
+
+  /* 卡片背景 - 半透明玻璃效果 */
+  --card-bg: rgba(30, 41, 59, 0.8);
+  --card-border: rgba(51, 65, 85, 0.6);
+
+  /* 输入框 */
+  --input-bg: rgba(15, 23, 42, 0.8);
+  --input-border: #475569;
+  --input-focus-ring: #60a5fa;
+
+  /* 代码块 - 微调 */
+  --code-bg: #020617;
+  --code-text: #34d399;
+}

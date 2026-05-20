@@ -103,6 +103,12 @@ const routes: RouteRecordRaw[] = [
         meta: { title: '文书中心' },
       },
       {
+        path: '/documents/:id',
+        name: 'DocumentDetail',
+        component: () => import('@/pages/document/[id]/index.vue'),
+        meta: { title: '文书详情' },
+      },
+      {
         path: '/profile',
         name: 'Profile',
         component: () => import('@/pages/profile/index.vue'),

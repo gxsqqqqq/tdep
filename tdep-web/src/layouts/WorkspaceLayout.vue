@@ -30,14 +30,7 @@
       </div>
 
       <div class="header-right">
-        <button class="theme-toggle" @click="toggleTheme" :title="isDark ? '切换亮色模式' : '切换暗色模式'">
-          <svg v-if="isDark" class="icon" viewBox="0 0 24 24" fill="currentColor">
-            <path d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"/>
-          </svg>
-          <svg v-else class="icon" viewBox="0 0 24 24" fill="currentColor">
-            <path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"/>
-          </svg>
-        </button>
+        <ThemeToggle />
 
         <div class="notification-wrapper">
           <button class="notification-btn" @click="toggleNotifications">
@@ -179,13 +172,15 @@ import { ref, computed, onMounted, onUnmounted, h } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { useAuthStore } from '@/stores/auth'
 import { UserRole, ROLE_LABELS } from '@/lib/constants/roles'
+import ThemeToggle from '@/components/ui/ThemeToggle.vue'
+import { useDarkMode } from '@/composables/useDarkMode'
 
 const route = useRoute()
 const router = useRouter()
 const authStore = useAuthStore()
+const { isDark } = useDarkMode()
 
 const isCollapsed = ref(false)
-const isDark = ref(false)
 const showUserMenu = ref(false)
 const showMobileSidebar = ref(false)
 const searchQuery = ref('')
@@ -343,12 +338,6 @@ function toggleSidebar() {
   }
 }
 
-function toggleTheme() {
-  isDark.value = !isDark.value
-  document.documentElement.classList.toggle('dark', isDark.value)
-  localStorage.setItem('theme', isDark.value ? 'dark' : 'light')
-}
-
 function toggleUserMenu() {
   showUserMenu.value = !showUserMenu.value
 }
@@ -409,12 +398,6 @@ onMounted(() => {
   document.addEventListener('click', handleClickOutside)
   window.addEventListener('resize', handleResize)
 
-  const savedTheme = localStorage.getItem('theme')
-  if (savedTheme === 'dark') {
-    isDark.value = true
-    document.documentElement.classList.add('dark')
-  }
-
   if (window.innerWidth < 1024) {
     isCollapsed.value = true
   }
@@ -431,13 +414,12 @@ onUnmounted(() => {
   display: flex;
   flex-direction: column;
   min-height: 100vh;
-  background-color: #f5f7fa;
-  transition: background-color 0.3s ease;
+  background-color: var(--color-bg-primary);
+  transition: background-color 0.3s ease, color 0.3s ease;
 }
 
 .workspace-layout.dark {
-  background-color: #1a1d23;
-  color: #e5e7eb;
+  background-color: var(--color-bg-primary);
 }
 
 .workspace-header {
@@ -450,15 +432,15 @@ onUnmounted(() => {
   align-items: center;
   justify-content: space-between;
   padding: 0 20px;
-  background: white;
-  border-bottom: 1px solid #e5e7eb;
+  background: var(--color-bg-secondary);
+  border-bottom: 1px solid var(--color-border);
   z-index: 1000;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+  box-shadow: var(--shadow-sm);
 }
 
 .dark .workspace-header {
-  background: #1f2937;
-  border-bottom-color: #374151;
+  background: var(--color-bg-tertiary);
+  border-bottom-color: var(--color-border);
 }
 
 .header-left {
@@ -533,28 +515,29 @@ onUnmounted(() => {
 .search-box input {
   width: 100%;
   padding: 8px 16px 8px 40px;
-  border: 1px solid #e5e7eb;
+  border: 1px solid var(--color-border);
   border-radius: 8px;
-  background-color: #f9fafb;
+  background-color: var(--color-bg-tertiary);
   font-size: 14px;
+  color: var(--color-text-primary);
   outline: none;
   transition: all 0.2s ease;
 }
 
 .search-box input:focus {
-  border-color: #2563eb;
-  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
-  background-color: white;
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 3px var(--color-primary-alpha);
+  background-color: var(--color-bg-secondary);
 }
 
 .dark .search-box input {
-  background-color: #374151;
-  border-color: #4b5563;
-  color: #e5e7eb;
+  background-color: var(--color-bg-tertiary);
+  border-color: var(--color-border);
+  color: var(--color-text-primary);
 }
 
 .dark .search-box input:focus {
-  border-color: #60a5fa;
+  border-color: var(--color-primary-light);
   box-shadow: 0 0 0 3px rgba(96, 165, 250, 0.1);
 }
 
@@ -564,7 +547,6 @@ onUnmounted(() => {
   gap: 12px;
 }
 
-.theme-toggle,
 .notification-btn {
   position: relative;
   display: flex;
@@ -580,13 +562,11 @@ onUnmounted(() => {
   transition: all 0.2s ease;
 }
 
-.theme-toggle:hover,
 .notification-btn:hover {
   background-color: #f3f4f6;
   color: #374151;
 }
 
-.dark .theme-toggle:hover,
 .dark .notification-btn:hover {
   background-color: #374151;
   color: #e5e7eb;
@@ -655,7 +635,7 @@ onUnmounted(() => {
 .username {
   font-size: 14px;
   font-weight: 500;
-  color: #374151;
+  color: var(--color-text-primary);
   max-width: 120px;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -663,7 +643,7 @@ onUnmounted(() => {
 }
 
 .dark .username {
-  color: #e5e7eb;
+  color: var(--color-text-primary);
 }
 
 .chevron {
@@ -678,16 +658,16 @@ onUnmounted(() => {
   top: calc(100% + 8px);
   right: 0;
   width: 280px;
-  background: white;
+  background: var(--color-bg-secondary);
   border-radius: 12px;
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+  box-shadow: var(--shadow-lg);
   overflow: hidden;
   z-index: 1001;
 }
 
 .dark .dropdown-menu {
-  background: #1f2937;
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.4);
+  background: var(--color-bg-tertiary);
+  box-shadow: var(--shadow-dark-lg);
 }
 
 .dropdown-header {
@@ -707,26 +687,26 @@ onUnmounted(() => {
 .info-text .name {
   font-size: 16px;
   font-weight: 600;
-  color: #111827;
+  color: var(--color-text-primary);
 }
 
 .dark .info-text .name {
-  color: #f9fafb;
+  color: var(--color-text-primary);
 }
 
 .info-text .role {
   font-size: 13px;
-  color: #6b7280;
+  color: var(--color-text-secondary);
   margin-top: 2px;
 }
 
 .divider {
   height: 1px;
-  background-color: #f3f4f6;
+  background-color: var(--color-border);
 }
 
 .dark .divider {
-  background-color: #374151;
+  background-color: var(--color-border);
 }
 
 .menu-item {
@@ -770,8 +750,8 @@ onUnmounted(() => {
 
 .sidebar {
   width: 260px;
-  background: white;
-  border-right: 1px solid #e5e7eb;
+  background: var(--color-bg-secondary);
+  border-right: 1px solid var(--color-border);
   overflow-y: auto;
   transition: width 0.3s ease, transform 0.3s ease;
   flex-shrink: 0;
@@ -782,8 +762,8 @@ onUnmounted(() => {
 }
 
 .dark .sidebar {
-  background: #1f2937;
-  border-right-color: #374151;
+  background: var(--color-bg-tertiary);
+  border-right-color: var(--color-border);
 }
 
 .nav-menu {
@@ -891,11 +871,11 @@ onUnmounted(() => {
   flex: 1;
   overflow-y: auto;
   padding: 24px;
-  background-color: #f5f7fa;
+  background-color: var(--color-bg-primary);
 }
 
 .dark .main-content {
-  background-color: #111827;
+  background-color: var(--color-bg-primary);
 }
 
 .breadcrumb-bar {
@@ -910,13 +890,13 @@ onUnmounted(() => {
 }
 
 .breadcrumb-item {
-  color: #6b7280;
+  color: var(--color-text-secondary);
   text-decoration: none;
   transition: color 0.2s ease;
 }
 
 .breadcrumb-item:hover:not(.current):not(.home) {
-  color: #2563eb;
+  color: var(--color-primary);
 }
 
 .breadcrumb-item.home {
@@ -925,16 +905,16 @@ onUnmounted(() => {
 }
 
 .breadcrumb-item.current {
-  color: #111827;
+  color: var(--color-text-primary);
   font-weight: 500;
 }
 
 .dark .breadcrumb-item.current {
-  color: #f9fafb;
+  color: var(--color-text-primary);
 }
 
 .separator {
-  color: #d1d5db;
+  color: var(--color-border);
 }
 
 .content-area {
